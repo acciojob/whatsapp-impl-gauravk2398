@@ -14,7 +14,6 @@ public class WhatsappRepository {
     private HashMap<Message, User> senderMap;
     private HashMap<Group, User> adminMap;
     private HashMap<String, User> userAcc;
-    private HashSet<String> userMobile;
     private int customGroupCount;
     private int messageId;
 
@@ -24,7 +23,6 @@ public class WhatsappRepository {
         this.senderMap = new HashMap<Message, User>();
         this.adminMap = new HashMap<Group, User>();
         this.userAcc=new HashMap<String,User>();
-        this.userMobile = new HashSet<>();
         this.customGroupCount = 0;
         this.messageId = 0;
     }
@@ -58,21 +56,25 @@ public class WhatsappRepository {
         if(!this.userExistsInGroup(group,sender))
             throw new Exception("You are not allowed to send message");
         List<Message> mssges=new ArrayList<>();
+        if(groupMessageMap.containsKey(group))
+            mssges=groupMessageMap.get(group);
+
         mssges.add(message);
         groupMessageMap.put(group,mssges);
         return mssges.size();
     }
 
-    public String createUser(String name, String mobile) {
+    public void createUser(String name, String mobile) {
         userAcc.put(mobile,new User(name,mobile));
-        return "user added";
     }
 
     public  Group createGroup(List<User> users) {
         if(users.size()==2)
             return this.createPersnlChat(users);
+
+
         this.customGroupCount++;
-        String grpName="Group "+this.customGroupCount;
+        String grpName="Group "+ this.customGroupCount;
         Group group=new Group(grpName,users.size());
         groupUserMap.put(group,users);
         adminMap.put(group,users.get(0));
@@ -95,6 +97,8 @@ public class WhatsappRepository {
     public boolean ifNewUser(String mobile) {
         if(userAcc.containsKey(mobile))
             return false;
+
+
         return true;
     }
 }

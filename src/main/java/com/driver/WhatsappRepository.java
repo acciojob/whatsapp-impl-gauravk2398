@@ -37,7 +37,7 @@ public class WhatsappRepository {
         if(!this.userExistsInGroup(group,user))
             throw new Exception("User is not in the Group");
         adminMap.put(group,user);
-        return "SUCCESS";
+        return "user added";
     }
 
     private boolean userExistsInGroup(Group group, User sender) {
@@ -52,9 +52,9 @@ public class WhatsappRepository {
 
     public int sendMessage(Message message, User sender, Group group) throws Exception {
         if(!groupUserMap.containsKey(group))
-            throw new Exception("Group does not exists");
+            throw new Exception("Group does not exist");
         if(!this.userExistsInGroup(group,sender))
-            throw new Exception("not allowed to send message");
+            throw new Exception("You are not allowed to send message");
         List<Message> mssges=new ArrayList<>();
         mssges.add(message);
         groupMessageMap.put(group,mssges);
@@ -63,14 +63,14 @@ public class WhatsappRepository {
 
     public String createUser(String name, String mobile) {
         userAcc.put(mobile,new User(name,mobile));
-        return "User added";
+        return "user added";
     }
 
     public  Group createGroup(List<User> users) {
         if(users.size()==2)
             return this.createPersnlChat(users);
         this.customGroupCount++;
-        String grpName="Group"+this.customGroupCount;
+        String grpName="Group "+this.customGroupCount;
         Group group=new Group(grpName,users.size());
         groupUserMap.put(group,users);
         adminMap.put(group,users.get(0));

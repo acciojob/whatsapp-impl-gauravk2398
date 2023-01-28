@@ -22,7 +22,7 @@ public class WhatsappService {
     public String createUser(String name, String mobile) {
          whatsappRepository.createUser(name,mobile);
 
-         return "user added";
+         return "SUCCESS";
     }
 
     public int sendMessage(Message message, User sender, Group group) throws Exception {

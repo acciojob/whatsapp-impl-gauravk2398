@@ -35,9 +35,11 @@ public class WhatsappRepository {
         if(!adminMap.get(group).equals(approver))
             throw new Exception("Approver does not have rights");
         if(!this.userExistsInGroup(group,user))
-            throw new Exception("User is not in the Group");
+            throw new Exception("User is not a participant");
+
+
         adminMap.put(group,user);
-        return "user added";
+        return "SUCCESS";
     }
 
     private boolean userExistsInGroup(Group group, User sender) {
